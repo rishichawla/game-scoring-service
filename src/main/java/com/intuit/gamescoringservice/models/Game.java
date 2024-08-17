@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "players")
+@Table(name = "games")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Player {
+public class Game {
     @Id
     @Column(name = "id")
     private String id;
@@ -22,7 +22,7 @@ public class Player {
     @Nonnull
     private String name;
 
-    public Player(String id) {
+    public Game(String id) {
         this.id = id;
     }
 }

@@ -2,4 +2,4 @@
 data
 
 target
-.mvn
+.mvn/**

@@ -16,6 +16,7 @@ import java.time.Instant;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "scores")
 public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +27,11 @@ public class Score {
 
     @ManyToOne(targetEntity = Player.class)
     @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false)
-    private Player player_id;
+    private Player player;
+
+    @ManyToOne(targetEntity = Game.class)
+    @JoinColumn(name = "game_id", referencedColumnName = "id", nullable = false)
+    private Game game;
 
     @Column(updatable = false, insertable = false)
     @CreationTimestamp(source = SourceType.DB)

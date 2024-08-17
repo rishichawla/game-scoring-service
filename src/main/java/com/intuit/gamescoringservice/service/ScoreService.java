@@ -1,5 +1,7 @@
 package com.intuit.gamescoringservice.service;
 
+import com.intuit.gamescoringservice.models.Game;
+import com.intuit.gamescoringservice.models.Player;
 import com.intuit.gamescoringservice.models.Score;
 import com.intuit.gamescoringservice.repository.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +22,13 @@ public class ScoreService {
 
     public List<Score> getTopScores() {
         return scoreRepository.findAllByOrderByScoreDesc(Limit.of(5));
+    }
+
+    public List<Score> getScoresForPlayer(String playerId) {
+        return scoreRepository.findByPlayerOrderByScoreDesc(new Player(playerId), Limit.of(5));
+    }
+
+    public List<Score> getScoreForGame(String gameId) {
+        return scoreRepository.findByGameOrderByScoreDesc(new Game(gameId), Limit.of(5));
     }
 }
