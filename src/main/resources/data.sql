@@ -1,0 +1,1 @@
+MERGE INTO PLAYER KEY(ID) VALUES ('1', 'Rishi');
