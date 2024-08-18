@@ -3,12 +3,12 @@ package com.intuit.gamescoringservice.controller;
 import com.intuit.gamescoringservice.models.Score;
 import com.intuit.gamescoringservice.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -16,18 +16,14 @@ public class ScoreController {
     @Autowired
     private ScoreService scoreService;
 
-    @GetMapping("/top-scores")
-    public List<Score> getTop5Scores() {
-        return scoreService.getTopScores();
-    }
-
-    @GetMapping("/player/{playerId}/top-scores")
-    public List<Score> getTop5ScoresForPlayer(@PathVariable String playerId) {
-        return scoreService.getScoresForPlayer(playerId);
-    }
-
-    @GetMapping("/game/{gameId}/top-scores")
-    public List<Score> getTop5ScoresForGame(@PathVariable String gameId) {
-        return scoreService.getScoreForGame(gameId);
+    @GetMapping("/{gameId}/top-scores")
+    public List<Score> getTop5Scores(@PathVariable String gameId) {
+        try {
+            return scoreService.getTopScoresForGame(gameId);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND); // TODO: Replace with global exception handlers
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

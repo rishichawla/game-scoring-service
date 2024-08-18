@@ -1,22 +1,11 @@
 spring:
   application:
     name: Game Scoring Service
-  datasource:
-    url: jdbc:h2:file:./data/scores.db
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  sql:
-    init:
-      mode: always
-  h2:
-    console.enabled: true
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      port: 9042
+      keyspace-name: game-service
   kafka:
     groupId: game-scoring-service
     bootstrapAddress: http://localhost:9092

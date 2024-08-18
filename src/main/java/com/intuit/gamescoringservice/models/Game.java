@@ -1,28 +1,17 @@
 package com.intuit.gamescoringservice.models;
 
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table(name = "games")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Game {
-    @Id
-    @Column(name = "id")
+    @JsonProperty(value = "game_id")
     private String id;
 
-    @Nonnull
+    @JsonProperty(value = "name")
     private String name;
-
-    public Game(String id) {
-        this.id = id;
-    }
 }

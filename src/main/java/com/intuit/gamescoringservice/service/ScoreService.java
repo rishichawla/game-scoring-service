@@ -11,17 +11,37 @@ import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ScoreService {
     Logger logger = LoggerFactory.getLogger(ScoreService.class);
 
     @Autowired
+    private GameService gameService;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
     private ScoreRepository scoreRepository;
 
     public void addScore(Score score) {
-        if (score.getScore() < 0 || score.getScore() > 100) {
+        if (score.getScore() < 0 || score.getScore() > 100) { // TODO: Replace this with config
             logger.error("Invalid score: {} received, ignoring message", score.getScore());
+            return;
+        }
+
+        Optional<Game> game = gameService.getGame(score.getGameId());
+        if (game.isEmpty()) {
+            logger.error("Invalid game: {} received, ignoring message", score.getGameId());
+            return;
+        }
+
+        Optional<Player> player = playerService.getPlayer(score.getPlayerId());
+        if (player.isEmpty()) {
+            logger.error("Invalid player: {} received, ignoring message", score.getPlayerId());
             return;
         }
 
@@ -32,15 +52,14 @@ public class ScoreService {
         }
     }
 
-    public List<Score> getTopScores() {
-        return scoreRepository.findAllByOrderByScoreDesc(Limit.of(5));
-    }
+    public List<Score> getTopScoresForGame(String gameId) throws Exception {
 
-    public List<Score> getScoresForPlayer(String playerId) {
-        return scoreRepository.findByPlayerOrderByScoreDesc(new Player(playerId), Limit.of(5));
-    }
+        Optional<Game> game = gameService.getGame(gameId);
+        if (game.isEmpty()) {
+            logger.error("Invalid game: {} received, ignoring message", gameId);
+            throw new NoSuchElementException("Game not found");
+        }
 
-    public List<Score> getScoreForGame(String gameId) {
-        return scoreRepository.findByGameOrderByScoreDesc(new Game(gameId), Limit.of(5));
+        return scoreRepository.findByGameId(gameId, Limit.of(5));
     }
 }
