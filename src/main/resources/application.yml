@@ -10,3 +10,7 @@ spring:
     groupId: game-scoring-service
     bootstrapAddress: http://localhost:9092
     topic: test-topic
+
+springdoc:
+  swagger-ui:
+    path: /swagger
