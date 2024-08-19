@@ -1,39 +1,38 @@
 package com.intuit.gamescoringservice.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SourceType;
+import org.springframework.data.cassandra.core.cql.Ordering;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
+@Table(value = "scores")
 @Data
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "scores")
+@Builder
 public class Score {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
-    @Nonnull
+    @PrimaryKeyColumn(name = "game_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    @JsonProperty(value = "game_id")
+    private String gameId;
+
+    @PrimaryKeyColumn(name = "player_id", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @JsonProperty(value = "player_id")
+    @Column(value = "player_id")
+    private String playerId;
+
+    @PrimaryKeyColumn(name = "score", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @JsonProperty(value = "score")
     private Integer score;
 
-    @ManyToOne(targetEntity = Player.class)
-    @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false)
-    private Player player;
-
-    @ManyToOne(targetEntity = Game.class)
-    @JoinColumn(name = "game_id", referencedColumnName = "id", nullable = false)
-    private Game game;
-
-    @Column(updatable = false, insertable = false)
-    @CreationTimestamp(source = SourceType.DB)
-    private Instant created_on;
+    @Column(value = "created_on")
+    private LocalDateTime created_on = LocalDateTime.now();
 }
