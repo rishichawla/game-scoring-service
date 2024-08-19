@@ -1,7 +1,1 @@
-MERGE INTO PLAYERS KEY(ID) VALUES ('1', 'Rishi');
-MERGE INTO PLAYERS KEY(ID) VALUES ('2', 'Rishi 1');
-MERGE INTO PLAYERS KEY(ID) VALUES ('3', 'Rishi 2');
-
-MERGE INTO GAMES KEY(ID) VALUES ('1', 'GAME 1');
-MERGE INTO GAMES KEY(ID) VALUES ('2', 'GAME 2');
-MERGE INTO GAMES KEY(ID) VALUES ('3', 'GAME 3');
+CREATE TABLE scores (game_id text, score int, player_id text, created_on timestamp, PRIMARY KEY((game_id), score, player_id)) WITH CLUSTERING ORDER BY (score DESC);
