@@ -1,5 +1,6 @@
 package com.intuit.gamescoringservice.service;
 
+import com.intuit.gamescoringservice.dto.ScoreDto.ScoreDTO;
 import com.intuit.gamescoringservice.models.Game;
 import com.intuit.gamescoringservice.models.Player;
 import com.intuit.gamescoringservice.models.Score;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScoreService {
@@ -52,7 +54,7 @@ public class ScoreService {
         }
     }
 
-    public List<Score> getTopScoresForGame(String gameId) throws Exception {
+    public List<ScoreDTO> getTopScoresForGame(String gameId) throws Exception {
 
         Optional<Game> game = gameService.getGame(gameId);
         if (game.isEmpty()) {
@@ -60,6 +62,18 @@ public class ScoreService {
             throw new NoSuchElementException("Game not found");
         }
 
-        return scoreRepository.findByGameId(gameId, Limit.of(5));
+        return convertScoreToScoreDTO(scoreRepository.findByGameId(gameId, Limit.of(5)), game.get());
+    }
+
+    private List<ScoreDTO> convertScoreToScoreDTO(List<Score> scores, Game game) {
+        return scores.stream().map(score -> {
+            Optional<Player> player = playerService.getPlayer(score.getPlayerId());
+            return ScoreDTO.builder()
+                    .game(game)
+                    .score(score.getScore())
+                    // A player won't be deleted, but just for completion sake.
+                    .player(player.orElseGet(() -> new Player(score.getPlayerId(), "NA")))
+                    .build();
+        }).collect(Collectors.toList());
     }
 }

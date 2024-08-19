@@ -1,5 +1,6 @@
 package com.intuit.gamescoringservice.controller;
 
+import com.intuit.gamescoringservice.dto.ScoreDto.ScoreDTO;
 import com.intuit.gamescoringservice.models.Score;
 import com.intuit.gamescoringservice.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ScoreController {
     private ScoreService scoreService;
 
     @GetMapping("/{gameId}/top-scores")
-    public List<Score> getTop5Scores(@PathVariable String gameId) {
+    public List<ScoreDTO> getTop5Scores(@PathVariable String gameId) {
         try {
             return scoreService.getTopScoresForGame(gameId);
         } catch (NoSuchElementException e) {
