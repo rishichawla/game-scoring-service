@@ -32,6 +32,7 @@
 * Minimum and maximum scores can be put in config.
 * More unit tests can be added.
 * Integration tests can be written that can mock (or create a dummy) db and kafka.
+* Authentication/Authorisation can be added
 
 Please note that in order to run this project, you need to have kafka and cassandra running locally and pass in their
 corresponding configs in application.yml file
