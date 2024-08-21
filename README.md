@@ -1,5 +1,9 @@
 # Game Scoring Service
 
+## Architecture Diagram:
+
+![Architecture Diagram](/assets/Architecture%20Diagram.png)
+
 ## ER Diagram:
 
 ![ER Diagram](/assets/ER%20Diagram.png)
