@@ -1,1 +1,1 @@
-CREATE TABLE scores (game_id text, score int, player_id text, created_on timestamp, PRIMARY KEY((game_id), score, player_id)) WITH CLUSTERING ORDER BY (score DESC);
+CREATE TABLE scores (game_id text,  player_id text, score int, created_on timestamp, PRIMARY KEY(game_id, player_id));

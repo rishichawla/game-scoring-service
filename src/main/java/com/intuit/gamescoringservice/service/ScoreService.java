@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +60,13 @@ public class ScoreService {
             throw new NoSuchElementException("Game not found");
         }
 
-        return convertScoreToScoreDTO(scoreRepository.findByGameId(gameId, Limit.of(5)), game.get());
+        List<Score> scoresForGame = scoreRepository.findByGameId(gameId);
+        scoresForGame.sort(Comparator.comparingInt(Score::getScore));
+        Collections.reverse(scoresForGame);
+
+        return convertScoreToScoreDTO(
+                scoresForGame.subList(0, Math.min(5, scoresForGame.size())),
+                game.get());
     }
 
     private List<ScoreDTO> convertScoreToScoreDTO(List<Score> scores, Game game) {

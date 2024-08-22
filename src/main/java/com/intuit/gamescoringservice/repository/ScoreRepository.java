@@ -9,5 +9,5 @@ import java.util.List;
 
 @EnableCassandraRepositories
 public interface ScoreRepository extends CassandraRepository<Score, String> {
-    public List<Score> findByGameId(String gameId, Limit limit);
+    public List<Score> findByGameId(String gameId);
 }
