@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -18,6 +17,8 @@ import java.time.LocalDateTime;
 @Table(value = "scores")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Score {
 
     @PrimaryKeyColumn(name = "game_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
